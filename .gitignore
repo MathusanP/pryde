@@ -1,0 +1,19 @@
+﻿.idea/
+bin/
+obj/
+
+
+# User-specific/machine-specific files
+*.user
+*.suo
+
+# Config with secrets
+config.json
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# SQLite database (generated at runtime, not source)
+*.db
+*.db-journal
