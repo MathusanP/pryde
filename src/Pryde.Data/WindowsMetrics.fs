@@ -27,3 +27,24 @@ module WindowsMetrics =
             CoreCount = coreCount
             Name = name
         }
+        
+    
+    let getDiskInfo () : DiskInfo list=
+        use searcher = new ManagementObjectSearcher("SELECT DeviceID, VolumeName, Size, FreeSpace, FileSystem FROM Win32_LogicalDisk WHERE DriveType = 3")
+        let results = searcher.Get()
+        
+        [ for item in results do
+              let deviceId = item.["DeviceID"] :?> string
+              let size = item.["Size"] :?> uint64
+              let freeSpace = item.["FreeSpace"] :?> uint64
+              let fileSystem = item.["FileSystem"] :?> string
+              
+              let volumeName =
+                  match item.["VolumeName"] with | null -> "Unlabeled" | v -> v :?> string
+              yield {
+                  DriveLetter = deviceId
+                  VolumeName = volumeName
+                  TotalBytes = int64 size
+                  FreeBytes = int64 freeSpace
+                  FileSystem = fileSystem
+              }]
