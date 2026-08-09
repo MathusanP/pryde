@@ -5,18 +5,18 @@ open Pryde.Data
 
 [<EntryPoint>]
 let main args =
-    let cpu = WindowsMetrics.getCpuUsage ()
-    let disk = WindowsMetrics.getDiskInfo ()
-    let gpu = WindowsMetrics.getGraphicsInfo()
+    let cpu = DeviceMetrics.getCpuUsage ()
+    let disk = DeviceMetrics.getDiskInfo ()
+    let gpu = DeviceMetrics.getGraphicsInfo()
+    let uptime = DeviceMetrics.getUptime()
     
     printfn "%A" cpu
     printfn "%A" disk
     printfn "%A" gpu
+    printfn "%A" uptime
     
     let builder = WebApplication.CreateBuilder(args)
     let app = builder.Build()
-
-    app.MapGet("/", Func<string>(fun () -> "Hello World!")) |> ignore
 
     app.Run()
 
