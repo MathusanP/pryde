@@ -1,0 +1,33 @@
+﻿name: Continuous Integration
+
+on:
+  push:         # Triggers on EVERY commit pushed to ANY branch
+  pull_request: # Triggers when a Pull Request is opened or updated
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the pushed code commit
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Set up the .NET 8 SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3. Restore NuGet packages
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      # 4. Compile the project
+      - name: Build Solution
+        run: dotnet build --no-restore --configuration Release
+
+      # 5. Run xUnit tests
+      - name: Run Unit Tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
