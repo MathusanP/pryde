@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Include="DeviceMetrics.fs" />
+    <Compile Include="NetworkMetrics.fs" />
   </ItemGroup>
 
   <ItemGroup>

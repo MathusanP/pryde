@@ -8,6 +8,7 @@ type CpuMetrics = {
     CoreCount: int
     Name: string
     Temperature: float option // In Celsius
+    Uptime: System.TimeSpan
 }
 
 type DiskInfo = {
@@ -31,4 +32,16 @@ type GraphicsInfo = {
     Temperature: float option
     UsagePercent: float option
     VramUsedMB: float option 
+}
+
+type NetworkInfo = {
+    AdapterName: string
+    BytesReceivedPerSec: int64
+    BytesSentPerSec: int64
+}
+
+type PortInfo = {
+    Port: int
+    Address: string
+    Protocol: string
 }

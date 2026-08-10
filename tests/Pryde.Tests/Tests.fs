@@ -1,6 +1,9 @@
 ﻿module Pryde.Data.Tests.DeviceMetricsTests
 
+
 open Xunit
+open System.Net
+open System.Net.Sockets
 open Pryde.Data
 open Pryde.Core
 
@@ -37,3 +40,41 @@ let ``getUptime returns a positive TimeSpan`` () =
     
     Assert.True(uptime.TotalSeconds > 0.0)
     
+// Opening a port to listen to test
+module NetworkMetricsTest =
+    [<Fact>]
+    let ``isPortListening returns true for a port with an active listener`` () =
+        let testPort = 54321
+        let listener = TcpListener(IPAddress.Loopback, testPort)
+        listener.Start()
+        
+        try
+            let result = NetworkMetrics.isPortListening testPort
+            Assert.True(result)
+        finally
+            listener.Stop()
+    
+    [<Fact>]
+    let ``isPortListening returns false for a port with no listener`` () =
+        let testPort = 54322
+        let result = NetworkMetrics.isPortListening testPort
+        Assert.False(result)
+        
+    [<Theory>]
+    [<InlineData(80)>]
+    [<InlineData(443)>]
+    [<InlineData(65000)>]
+    let ``isPortListening does not throw for various port numbers`` (port: int) =
+        let exn = Record.Exception(fun () -> NetworkMetrics.isPortListening port |> ignore)
+        Assert.Null(exn)
+        
+    [<Fact>]
+    let ``getNetworkThroughput returns a list without throwing`` () =
+        let result = NetworkMetrics.getNetworkThroughput ()
+        Assert.NotNull(result)
+        
+    [<Fact>]
+    let ``getNetworkThroughput only returns adapters with non-zero traffic`` () =
+        let result = NetworkMetrics.getNetworkThroughput ()
+        result |> List.iter (fun adapter ->
+            Assert.True(adapter.BytesReceivedPerSec > 0L || adapter.BytesSentPerSec > 0L))

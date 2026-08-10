@@ -4,6 +4,7 @@ open Pryde.Core
 open System.Management
 open LibreHardwareMonitor.Hardware
 
+
 module DeviceMetrics =
 
     let getCpuTemperature () : float option =
@@ -22,6 +23,20 @@ module DeviceMetrics =
 
         computer.Close()
         result
+    
+    let getUptime() : System.TimeSpan =
+        use searcher = new ManagementObjectSearcher("SELECT LastBootUpTime FROM Win32_OperatingSystem")
+        let results = searcher.Get()
+    
+        let mutable uptime = System.TimeSpan.Zero
+    
+        for item in results do
+            let bootTimeRaw = item.["LastBootUpTime"] :?> string
+            let bootTime = ManagementDateTimeConverter.ToDateTime(bootTimeRaw)
+            uptime <- System.DateTime.Now - bootTime
+    
+        uptime
+    
 
     let getCpuUsage () : CpuMetrics =
         use searcher = new ManagementObjectSearcher("SELECT LoadPercentage, NumberOfLogicalProcessors, Name FROM Win32_Processor")
@@ -46,6 +61,7 @@ module DeviceMetrics =
             CoreCount = coreCount
             Name = name
             Temperature = getCpuTemperature ()
+            Uptime = getUptime()
         } 
     
     let getDiskInfo () : DiskInfo list =
@@ -115,15 +131,3 @@ module DeviceMetrics =
         computer.Close()
         list
     
-    let getUptime() : System.TimeSpan =
-        use searcher = new ManagementObjectSearcher("SELECT LastBootUpTime FROM Win32_OperatingSystem")
-        let results = searcher.Get()
-        
-        let mutable uptime = System.TimeSpan.Zero
-        
-        for item in results do
-            let bootTimeRaw = item.["LastBootUpTime"] :?> string
-            let bootTime = ManagementDateTimeConverter.ToDateTime(bootTimeRaw)
-            uptime <- System.DateTime.Now - bootTime
-        
-        uptime
