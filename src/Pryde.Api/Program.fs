@@ -6,7 +6,7 @@ open Pryde.Data.NetworkMetrics
 
 [<EntryPoint>]
 let main args =
-    let cpu = DeviceMetrics.getCpuUsage ()
+    let cpu = DeviceMetrics.getCpuInfo ()
     let disk = DeviceMetrics.getDiskInfo ()
     let gpu = DeviceMetrics.getGraphicsInfo()
     let networkThroughput = NetworkMetrics.getNetworkThroughput()

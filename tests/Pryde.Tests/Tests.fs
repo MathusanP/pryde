@@ -10,10 +10,11 @@ open Pryde.Core
 // Testing if WMI and Librehardware can execute
 
 [<Fact>]
-let ``getCpuUsage executes and returns non-empty hardware metadata`` () =
-    let metrics = DeviceMetrics.getCpuUsage()
+let ``getCpuInfo executes and returns non-empty hardware metadata`` () =
+    let metrics = DeviceMetrics.getCpuInfo()
     
     Assert.False(System.String.IsNullOrWhiteSpace(metrics.Name))
+    Assert.False(System.String.IsNullOrWhiteSpace(metrics.Architecture))
     Assert.True(metrics.CoreCount > 0 )
     Assert.True(metrics.UsagePercent > 0)
     Assert.True(metrics.UsagePercent >= 0.0 && metrics.UsagePercent <= 100.0)

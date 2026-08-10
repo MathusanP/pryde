@@ -4,6 +4,7 @@ open System.Runtime.InteropServices
 open System.Runtime.Serialization
 
 type CpuMetrics = {
+    Architecture: string
     UsagePercent: float
     CoreCount: int
     Name: string
