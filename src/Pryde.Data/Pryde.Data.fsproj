@@ -6,11 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Library.fs" />
+    <Compile Include="DeviceMetrics.fs" />
+    <Compile Include="NetworkMetrics.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Pryde.Core\Pryde.Core.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+    <PackageReference Include="System.Management" Version="10.0.10" />
   </ItemGroup>
 
 </Project>

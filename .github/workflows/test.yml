@@ -1,0 +1,28 @@
+﻿name: Continuous Integration
+
+on:
+  push:         # Triggers on EVERY commit pushed to ANY branch
+  pull_request: # Triggers when a Pull Request is opened or updated
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: windows-latest  # Change from ubuntu-latest to windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run Unit Tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
