@@ -5,15 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Handlers.fs" />
+    <Compile Include="Routes.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Pryde.Core\Pryde.Core.fsproj" />
     <ProjectReference Include="..\Pryde.Polling\Pryde.Polling.fsproj" />
+    <ProjectReference Include="..\Pryde.Data\Pryde.Data.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Giraffe" Version="8.3.0" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.7-pre714" />
   </ItemGroup>
 
