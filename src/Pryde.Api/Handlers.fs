@@ -27,4 +27,4 @@ let getPortHandler (port: int) : HttpHandler =
     fun next ctx ->
         match NetworkMetrics.getPortInfo port with
         | Some info -> json info next ctx
-        | None -> RequestErrors.NOT_FOUND (text "Port not listening") next ctx
+        | None -> (setStatusCode 404 >=> json {| message = "Port not listening" |}) next ctx
