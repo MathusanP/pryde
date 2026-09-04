@@ -46,7 +46,7 @@ module NetworkMetricsTest =
     [<Fact>]
     let ``isPortListening returns true for a port with an active listener`` () =
         let testPort = 54321
-        let listener = TcpListener(IPAddress.Loopback, testPort)
+        let listener = new TcpListener(IPAddress.Loopback, testPort)
         listener.Start()
         
         try
