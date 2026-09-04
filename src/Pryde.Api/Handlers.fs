@@ -25,6 +25,9 @@ let getNetworkThroughputHandler : HttpHandler =
 
 let getPortHandler (port: int) : HttpHandler =
     fun next ctx ->
-        match NetworkMetrics.getPortInfo port with
-        | Some info -> json info next ctx
-        | None -> (setStatusCode 404 >=> json {| message = "Port not listening" |}) next ctx
+         if port < 1 || port > 65535 then
+             (setStatusCode 400 >=> json {| message = "Invalid port number" |}) next ctx
+         else
+             match NetworkMetrics.getPortInfo port with
+             | Some info -> json info next ctx
+             | None -> (setStatusCode 404 >=> json {| message = "Port not listening" |}) next ctx
