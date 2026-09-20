@@ -7,22 +7,24 @@ open LibreHardwareMonitor.Hardware
 module DeviceMetrics =
 
     let getCpuTemperature () : float option =
-        let computer = Computer()
-        computer.IsCpuEnabled <- true
-        computer.Open()
-        
-        let mutable result = None
         try 
-            for hardware in computer.Hardware do
-                if hardware.HardwareType = HardwareType.Cpu then
-                    hardware.Update()
-                    for sensor in hardware.Sensors do 
-                        if sensor.SensorType = SensorType.Temperature && sensor.Name.Contains("Package") then
-                            result <- sensor.Value |> Option.ofNullable |> Option.map float
-        finally
-            computer.Close()
-        result
-    
+            let computer = Computer()
+            computer.IsCpuEnabled <- true
+            computer.Open()
+            
+            let mutable result = None
+            try 
+                for hardware in computer.Hardware do
+                    if hardware.HardwareType = HardwareType.Cpu then
+                        hardware.Update()
+                        for sensor in hardware.Sensors do 
+                            if sensor.SensorType = SensorType.Temperature && sensor.Name.Contains("Package") then
+                                result <- sensor.Value |> Option.ofNullable |> Option.map float
+            finally
+                computer.Close()
+            result
+        with
+        | _ -> None
     let getUptime () : System.TimeSpan =
         use searcher = new ManagementObjectSearcher("SELECT LastBootUpTime FROM Win32_OperatingSystem")
         use results = searcher.Get()
