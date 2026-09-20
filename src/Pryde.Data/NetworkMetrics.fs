@@ -9,7 +9,7 @@ module NetworkMetrics =
     let getNetworkThroughput () : NetworkInfo list =
         use searcher = new ManagementObjectSearcher(
             "SELECT Name, BytesReceivedPersec, BytesSentPersec FROM Win32_PerfFormattedData_Tcpip_NetworkInterface")
-        let results = searcher.Get()
+        use results = searcher.Get()
 
         [ for item in results do
               let name = item.["Name"] :?> string
